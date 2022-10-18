@@ -1,5 +1,8 @@
 <script>
+	import { guest } from '$lib/store/authstore';
+	// import components
 	import Navigation from '$lib/components/Navigation.svelte';
+	import '../app.css';
 	import { getFirebaseAuth } from '$lib/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 
@@ -20,14 +23,13 @@
 			member.displayName = user.displayName;
 			member.profileURL = user.photoURL;
 			member.email = user.email;
+			guest.set(false);
 			// ...
 		} else {
 			// User is signed out
 			// ...
 		}
 	});
-
-	import '../app.css';
 </script>
 
 <Navigation />

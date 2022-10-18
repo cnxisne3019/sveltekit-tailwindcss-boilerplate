@@ -1,8 +1,8 @@
 import { firebase_conf } from '$lib/conf/firebase_conf';
 import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { browser } from '$app/environment';
-import { guest } from '$lib/store/authstore';
+// import { cookie } from '@sveltejs/kit/';
 
 let firebaseApp;
 let auth;
@@ -22,10 +22,9 @@ export function getFirebaseAuth() {
 function onAuthStateChangedHandler(user) {
 	if (user) {
 		console.log('user is logged in');
-		guest.set(false);
 		return {
-			user: user.displayName
-		}
+			user: user.displayName,
+		};
 	} else {
 		unsubOnAuthStateChangedHandler();
 		console.log('user is logged out');
@@ -49,4 +48,16 @@ function getFirebaseConfig() {
 	} else {
 		return firebase_conf;
 	}
+}
+
+export async function firebaseLogout() {
+	await signOut(auth)
+		.then(() => {
+			console.log('Sign-out successful.');
+			// eslint-disable-next-line no-unused-vars
+			location.reload();
+		})
+		.catch((error) => {
+			console.log('Error Message:', error);
+		});
 }

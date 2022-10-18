@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const guest = writable(true);
+export const guest = writable(null);
