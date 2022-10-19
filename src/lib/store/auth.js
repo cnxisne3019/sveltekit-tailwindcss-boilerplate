@@ -1,13 +1,13 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
-let isUser = browser && localStorage.getItem('user');
+const defaultValue = '';
+const initialValue = browser ? window.localStorage.getItem('user') ?? defaultValue : defaultValue;
 
-console.log('Persist:', isUser);
-export let user = writable(isUser ? JSON.parse(localStorage.getItem('user')) : null);
+export const isUser = writable(initialValue);
 
-if (browser) {
-	user.subscribe((u) => (localStorage.user = u));
-}
-
-console.log(user)
+isUser.subscribe((value) => {
+	if (browser) {
+		window.localStorage.setItem('user', value);
+	}
+});

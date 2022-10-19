@@ -1,47 +1,35 @@
 <script>
-	import { user } from '$lib/store/auth';
-	import { onDestroy } from 'svelte';
+	import { isUser } from '$lib/store/auth';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
-	let user_value;
-	user.subscribe((u) => (user_value = u));
+	let currentLocal = '';
+	onMount(async () => {
+		currentLocal = (await browser) ? localStorage.getItem('user') : null;
+		currentLocal = parseInt(currentLocal);
+	});
 
-	let unsubscribe = user.subscribe((u) => (user_value = u));
-
-	let email;
-	let password;
-
-	function handleLogin() {
-		if (!email || !password) {
-			alert('please enter your credentials');
-			return;
-		}
-
-		// By the way, you MUST return the values to the store, otherwise
-		// it will end up as undefined, which is bad
-		user.update((u) => (u = JSON.stringify({ email: email, password: password })));
+	function login() {
+		isUser.set(1);
+		location.reload();
 	}
 
-	function handleLogout() {
-		user.update((u) => (u = ''));
+	function logOut() {
+		isUser.set(0);
+		location.reload();
 	}
-
-	// $: console.log('user_value', user_value);
-	// $: console.log('user', $user);
-
-	onDestroy(unsubscribe);
 </script>
 
-<svelte:head>
-	<title>Local Storage Stores Login</title>
-</svelte:head>
+<div>{'STORE => isUser: ' + $isUser}</div>
+<div>{'LOCALSTORAGE => currentLocal: ' + typeof currentLocal}</div>
 
-<div class="border p-4 max-w-xl mx-auto flex flex-col space-y-2">
-	{#if !user_value}
-		<input class="border p-2" type="email" bind:value="{email}" placeholder="enter email" />
-		<input class="border p-2" type="password" bind:value="{password}" placeholder="enter password" />
-		<button class="bg-sky-600 text-white p-3" on:click="{handleLogin}">Login</button>
-	{:else if user_value}
-		<h3>You are logged in as: {JSON.parse(user_value).email}</h3>
-		<button class="bg-sky-600 text-white" on:click="{handleLogout}">Logout</button>
-	{/if}
+{#if currentLocal}
+	Congreats!
+{:else}
+	login
+{/if}
+
+<div class=" flex space-x-3">
+	<button class="bg-slate-900 p-2 text-white" on:click="{login}">Log In</button>
+	<button class="bg-slate-900 p-2 text-white" on:click="{logOut}">Log Out</button>
 </div>
