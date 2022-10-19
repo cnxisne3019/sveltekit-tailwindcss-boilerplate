@@ -2,6 +2,14 @@
 	import { isUser } from '$lib/store/auth';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
+	import cookie from 'cookiejs';
+
+	let logged_in = '';
+	if (browser) {
+		console.log(cookie.get('logged_in'));
+		logged_in = cookie.get('logged_in');
+		console.log(typeof logged_in);
+	}
 
 	let currentLocal = '';
 	onMount(async () => {
@@ -11,17 +19,20 @@
 
 	function login() {
 		isUser.set(1);
+		cookie.set('logged_in', 'yes', 1);
 		location.reload();
 	}
 
 	function logOut() {
 		isUser.set(0);
+		cookie.set('logged_in', 'no', 1);
 		location.reload();
 	}
 </script>
 
 <div>{'STORE => isUser: ' + $isUser}</div>
-<div>{'LOCALSTORAGE => currentLocal: ' + typeof currentLocal}</div>
+<div>{'LOCALSTORAGE => currentLocal: ' + currentLocal}</div>
+<div>{'COOKIES => logged_in: ' + logged_in}</div>
 
 {#if currentLocal}
 	Congreats!
@@ -30,6 +41,6 @@
 {/if}
 
 <div class=" flex space-x-3">
-	<button class="bg-slate-900 p-2 text-white" on:click="{login}">Log In</button>
-	<button class="bg-slate-900 p-2 text-white" on:click="{logOut}">Log Out</button>
+	<button class="bg-slate-900 p-2 text-white" on:click={login}>Log In</button>
+	<button class="bg-slate-900 p-2 text-white" on:click={logOut}>Log Out</button>
 </div>
