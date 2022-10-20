@@ -2,7 +2,6 @@ import { firebase_conf } from '$lib/conf/firebase_conf';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { browser } from '$app/environment';
-// import { cookie } from '@sveltejs/kit/';
 
 let firebaseApp;
 let auth;
@@ -14,6 +13,7 @@ export function getFirebaseAuth() {
 	// applies the default browser language or use auth.languageCode = "fr";
 
 	if (browser) {
+		
 		unsubOnAuthStateChangedHandler = onAuthStateChanged(auth, onAuthStateChangedHandler);
 	}
 	return auth;
@@ -22,6 +22,7 @@ export function getFirebaseAuth() {
 function onAuthStateChangedHandler(user) {
 	if (user) {
 		console.log('user is logged in');
+		localStorage.setItem('isLogggedIn', true);
 		return {
 			user: user.displayName,
 		};
@@ -55,6 +56,9 @@ export async function firebaseLogout() {
 		.then(() => {
 			console.log('Sign-out successful.');
 			// eslint-disable-next-line no-unused-vars
+			if (browser){
+				localStorage.setItem('isLogggedIn', false);
+			}
 			location.reload();
 		})
 		.catch((error) => {
