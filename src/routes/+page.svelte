@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	console.log(data)
+	// console.log(data)
 </script>
 
 <div class="py-4 text-center leading-relaxed">
