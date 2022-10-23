@@ -1,10 +1,10 @@
 // import * as cookie from 'cookie';
+// import { redirect } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
-  // const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-  // console.log(event)
-
+	// const cookies = cookie.parse(event.request.headers.get('cookie') || '');
+	console.log('hooks.server.js is running...');
 	return await resolve(event);
 }
 

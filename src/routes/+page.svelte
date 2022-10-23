@@ -20,13 +20,11 @@
 	function login() {
 		isUser.set(1);
 		cookie.set('logged_in', 'yes', 1);
-		location.reload();
 	}
 
 	function logOut() {
 		isUser.set(0);
 		cookie.set('logged_in', 'no', 1);
-		location.reload();
 	}
 </script>
 
@@ -34,11 +32,21 @@
 <div>{'LOCALSTORAGE => currentLocal: ' + currentLocal}</div>
 <div>{'COOKIES => logged_in: ' + logged_in}</div>
 
-{#if currentLocal}
-	Congreats!
+{#if $isUser == '1'}
+	Congreats! login {$isUser}
+{:else if $isUser == '0'}
+	Please Login
 {:else}
-	login
+	loading...
 {/if}
+
+<!-- {#if $isUser}
+	Congreats!
+{:else if !$isUser}
+	Please Login
+{:else}
+	loading..
+{/if} -->
 
 <div class=" flex space-x-3">
 	<button class="bg-slate-900 p-2 text-white" on:click={login}>Log In</button>
