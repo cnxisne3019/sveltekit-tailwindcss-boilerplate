@@ -1,34 +1,35 @@
 /* eslint-disable no-unused-vars */
 import { redirect } from '@sveltejs/kit';
-
-
-export const load = ({ locals }) => {
-	console.log(locals.pb.records);
-	// console.log(locals.pb.authStore.baseModel.profile);
-	if (!locals.pb.authStore.isValid) {
-		throw redirect(303, '/auth/login');
-	}
-};
+import { seriealizedNonPOJOs } from '$lib/helpers';
 
 export const actions = {
 	addPost: async ({ locals, request }) => {
+
+		const authorData = {
+			authorId: `${locals.user.profile.userId}`,
+			authorName: `${locals.user.profile.name}`,
+		};
+
 		const formData = await request.formData();
-		const data = Object.fromEntries([...formData]);
-		console.log('TRY TO SEND THIS DATA');
-		console.log(data);
+
+		// Append current user into data formData
+		const FinalData = Object.assign(Object.fromEntries([...formData]), authorData);
+
+		console.log('🚀 TRY TO SEND THIS DATA');
+		console.log(FinalData);
+		console.log(`🚀 Current userID to post this is : ${locals.pb.authStore.model.profile.userId}`);
+		
 		try {
-			const newPost = await locals.pb.records.create('posts', data);
-			// const updatedPost = await locals.pb.records.update('posts', posts.id, {
-			// 	// trim name from email
-			// });
+			const newPost = await locals.pb.records.create('todos', FinalData);
+			console.log(`Created post id: ${newPost.id}`);
 		} catch (err) {
 			console.log('THIS IS ERROR MESSAGE:', err);
 			return {
 				error: true,
-				// message: seriealizedNonPOJOs(err),
+				message: seriealizedNonPOJOs(err),
 			};
 		}
 
-		throw redirect(303, '/auth/login');
+		throw redirect(303, '/posts');
 	},
 };

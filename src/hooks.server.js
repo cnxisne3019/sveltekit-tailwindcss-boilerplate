@@ -1,5 +1,4 @@
 import PocketBase from 'pocketbase';
-import { currentUser } from '$lib/store/authStore';
 
 export async function handle({ event, resolve }) {
 	event.locals.pb = new PocketBase('http://localhost:8090');
@@ -8,8 +7,8 @@ export async function handle({ event, resolve }) {
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 
 	if (event.locals.pb.authStore.isValid) {
-		console.log();
 		event.locals.user = event.locals.pb.authStore.model;
+		console.log(`(hooks): CURRENT AUTH USER IS ${JSON.stringify(event.locals.user.profile, null, 4)}`);
 		// console.log(event.locals.user);
 	}
 
@@ -24,11 +23,6 @@ export async function handle({ event, resolve }) {
 			secure: false,
 		})
 	);
-
-	currentUser.set({
-		id: event.locals.user.id,
-		name: event.locals.user.profile.name,
-	});
 
 	return response;
 }

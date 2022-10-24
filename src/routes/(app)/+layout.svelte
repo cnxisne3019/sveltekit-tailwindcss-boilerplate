@@ -1,0 +1,3 @@
+<main class="m-4">
+	<slot />
+</main>

@@ -7,6 +7,8 @@ export const load = ({ locals }) => {
 	}
 };
 
+
+
 export const actions = {
 	login: async ({ locals, request }) => {
 		const formData = await request.formData();
@@ -24,6 +26,6 @@ export const actions = {
 			};
 		}
 
-		throw redirect(303, '/');
+		throw redirect(303, '/posts');
 	},
 };
