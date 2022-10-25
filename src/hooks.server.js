@@ -1,5 +1,4 @@
 import PocketBase from 'pocketbase';
-// import { authToken } from '$lib/store/authStore';
 
 export async function handle({ event, resolve }) {
 	event.locals.pb = new PocketBase('http://localhost:8090');
@@ -9,19 +8,14 @@ export async function handle({ event, resolve }) {
 
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = event.locals.pb.authStore.model;
-		// console.log(`(hooks.server): authStore ${JSON.stringify(event.locals.pb.authStore)}`)
-		// console.log(`(hooks.server): user.profile ${JSON.stringify(event.locals.user.profile, null, 4)}`);
-		// console.log(event.locals.user);
 	}
 
 	const response = await resolve(event);
-
-	//TODO: secure cookie before deployment
-
 	// send back the default 'pb_auth' cookie to the client with the latest store state
 	response.headers.set(
 		'set-cookie',
 		event.locals.pb.authStore.exportToCookie({
+			//TODO: secure cookie before deployment
 			secure: false,
 		})
 	);
