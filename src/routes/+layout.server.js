@@ -2,7 +2,6 @@ import { seriealizedNonPOJOs } from '$lib/helpers';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export const load = ({ locals }) => {
-	// console.log(locals);
 	if (locals.user && locals.user.profile && locals.pb.authStore) {
 		return {
 			authToken: seriealizedNonPOJOs(locals.pb.authStore.baseToken),
