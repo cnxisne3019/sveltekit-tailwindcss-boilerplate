@@ -1,4 +1,5 @@
 import PocketBase from 'pocketbase';
+// import { authToken } from '$lib/store/authStore';
 
 export async function handle({ event, resolve }) {
 	event.locals.pb = new PocketBase('http://localhost:8090');
@@ -8,7 +9,8 @@ export async function handle({ event, resolve }) {
 
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = event.locals.pb.authStore.model;
-		console.log(`(hooks): CURRENT AUTH USER IS ${JSON.stringify(event.locals.user.profile, null, 4)}`);
+		// console.log(`(hooks.server): authStore ${JSON.stringify(event.locals.pb.authStore)}`)
+		// console.log(`(hooks.server): user.profile ${JSON.stringify(event.locals.user.profile, null, 4)}`);
 		// console.log(event.locals.user);
 	}
 

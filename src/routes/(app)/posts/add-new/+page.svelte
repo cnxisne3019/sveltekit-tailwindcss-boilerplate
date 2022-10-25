@@ -1,6 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	// export let dataว
+	// export let data
 </script>
 
 <section class="w-full max-w-[600px] bg-slate-100 border border-slate-200 p-4 mx-auto mt-4 rounded-lg">
