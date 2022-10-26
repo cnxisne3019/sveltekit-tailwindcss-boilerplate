@@ -1,8 +1,8 @@
 <script>
 	import Avatar from '$lib/components/Avatar.svelte';
-	// import { client } from '$lib/pocketbase';
-	// import { onMount } from 'svelte';
 	export let data;
+
+	// console.log('import data from +layout.server.js -> ' + JSON.stringify(data, null, 2));
 </script>
 
 <div class="py-4 text-center leading-relaxed">
@@ -12,7 +12,7 @@
 
 
 <div class="px-4 flex justify-center">
-	{#if data?.profile}
+	{#if data?.authProfile}
 		<Avatar />
 	{:else}
 		Go Login
