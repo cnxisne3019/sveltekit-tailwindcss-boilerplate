@@ -1,25 +1,20 @@
 <script>
 	import { onMount } from 'svelte';
-	import { client } from '$lib/pocketbase';
+	import { client, addAuthHeader } from '$lib/pocketbase';
 
-	// Received from /src/route/+layout.server.js as data below
 	export let data;
-	console.log(`received from /src/route/+layout.server.js -> ${data.authProfile}`);
-
-	let todoItems = [];
+	let posts = [];
 
 	onMount(async (event) => {
-		client.beforeSend = function (url, reqConfig) {
-			// For list of the possible reqConfig properties check
-			// https://developer.mozilla.org/en-US/docs/Web/API/fetch#options
-			reqConfig.headers = Object.assign({}, reqConfig.headers, {
-				Authorization: `User ${data.authToken}`,
+		try {
+			addAuthHeader(data.authToken);
+			const records = await client.records.getFullList('posts', 200 /* batch size */, {
+				sort: '-created',
 			});
-			return reqConfig;
-		};
-		const res = await client.records.getList('todos');
-		todoItems = res.items;
-
+			posts = await records;
+		} catch (err) {
+			console.log(err.isAbort);
+		}
 	});
 </script>
 
@@ -29,10 +24,10 @@
 </div>
 
 <div class=" flex flex-col gap-3 mt-4">
-	{#each todoItems as item}
+	{#each posts as post}
 		<div class="p-4 border rounded bg-white">
-			<p>{item.title}</p>
-			<p>{item.description}</p>
+			<p>{post.title}</p>
+			<p>{post.description}</p>
 		</div>
 	{/each}
 </div>
