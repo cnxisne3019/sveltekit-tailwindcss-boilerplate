@@ -18,9 +18,9 @@
 			</form>
 		</div>
 	{:else}
-		<div class="flex space-x2 items-center space-x-2">
+		<div class="flex space-x2 items-center space-x-2 font-medium text-slate-600">
 			<a href="/auth/register">Register</a>
-			<a href="/auth/login" class="px-4 py-2 rounded-md bg-sky-600">Login</a>
+			<a href="/auth/login" class="px-4 py-2 rounded-md bg-sky-600 text-white">Login</a>
 		</div>
 	{/if}
 </nav>
